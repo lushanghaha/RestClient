@@ -25,8 +25,9 @@ public class RestClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Failed to connect " + request.getRequest().getRequestLine().getUri());
+			System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
+			// e.printStackTrace();
 		}
 		return null;
 	}

@@ -16,7 +16,7 @@ public class Application {
 	public static void main (String[] args) {
 
 		// Select test method
-		Method methodForTest = Method.POST;
+		Method methodForTest = Method.GET;
 		
 		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
@@ -54,19 +54,23 @@ public class Application {
 		
 		// 使用方式
 		response = client.execute(request);
-		br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
-
-		// 輸出結果
-		String output;
-		System.out.println("HTTP status code: " + response.getHttpStatusCode());
-		System.out.println("Output from Server:");
 		try {
-			while ((output = br.readLine()) != null) {
-				System.out.println(output);
+			br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
+			// 輸出結果
+			String output;
+			System.out.println("HTTP status code: " + response.getHttpStatusCode());
+			System.out.println("Output from Server:");
+			try {
+				while ((output = br.readLine()) != null) {
+					System.out.println(output);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (NullPointerException e){
+			// System.out.println("No response from the server");
+			// e.printStackTrace();
 		}
 		
 		// 使用方式
