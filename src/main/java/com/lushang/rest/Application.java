@@ -18,12 +18,20 @@ public class Application {
 		// fake initializations
 		String url = "http://localhost:8080/country-rest-server/countries";
 		List<Header> headers = new ArrayList<Header>();
-		String body = "";
+		// GET, DELETE
+		// String body = "";
+		// POST
+		// String body = "{\"countryName\":\"LuShang\",\"population\":100077770}";
+		// PUT
+		String body = "{\"id\":1,\"countryName\":\"CHT\",\"population\":9999000}";
 		headers.add(new Header("accept", "application/json"));
 		
 		// 預期使用方式
 		RestClient client = new RestClient();
-		RestRequest request = new RestRequest(url, Method.GET, headers, body);
+		// RestRequest request = new RestRequest(url, Method.GET, headers, body);
+		// RestRequest request = new RestRequest(url, Method.POST, headers, body);
+		RestRequest request = new RestRequest(url, Method.PUT, headers, body);
+		// RestRequest request = new RestRequest(url, Method.DELETE, headers, body);
 		RestResponse response = client.execute(request);
 		BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
 		
@@ -42,5 +50,4 @@ public class Application {
 		// 預期使用方式
 		client.close();
 	}
-
 }

@@ -8,9 +8,11 @@ import org.apache.http.HttpResponse;
 public class RestResponse {
 	
 	private HttpResponse response;
+	private int httpStatusCode;
 	
 	public RestResponse(HttpResponse response) {
 		this.response = response;
+		this.httpStatusCode = response.getStatusLine().getStatusCode();
 	}
 	
 	public InputStream getEntityInputStream() {
@@ -27,8 +29,7 @@ public class RestResponse {
 		return null;
 	}
 	
-	public Integer getHttpStatus() {
-		return null;
+	public int httpStatusCode() {
+		return httpStatusCode;
 	}
-
 }
