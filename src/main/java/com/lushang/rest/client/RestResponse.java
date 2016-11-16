@@ -29,7 +29,7 @@ public class RestResponse {
 		return null;
 	}
 	
-	public int httpStatusCode() {
+	public int getHttpStatusCode() {
 		return httpStatusCode;
 	}
 }

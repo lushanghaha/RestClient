@@ -21,11 +21,6 @@ public class RestClient {
 			// HttpResponse response;
 			HttpResponse response = httpClient.execute((HttpUriRequest) request.getRequest());
 			return new RestResponse(response);
-			
-			// 如果 Server 端回傳的 HTTP status 不是 200，就噴 exception
-			/*if (response.getStatusLine().getStatusCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
-			}*/	
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

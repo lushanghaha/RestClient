@@ -15,29 +15,51 @@ import com.lushang.rest.client.RestResponse;
 public class Application {
 	public static void main (String[] args) {
 
-		// fake initializations
+		// Select test method
+		Method methodForTest = Method.POST;
+		
+		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
 		List<Header> headers = new ArrayList<Header>();
-		// GET, DELETE
-		// String body = "";
-		// POST
-		// String body = "{\"countryName\":\"LuShang\",\"population\":100077770}";
-		// PUT
-		String body = "{\"id\":1,\"countryName\":\"CHT\",\"population\":9999000}";
-		headers.add(new Header("accept", "application/json"));
-		
-		// 預期使用方式
+		String body = "";	
 		RestClient client = new RestClient();
-		// RestRequest request = new RestRequest(url, Method.GET, headers, body);
-		// RestRequest request = new RestRequest(url, Method.POST, headers, body);
-		RestRequest request = new RestRequest(url, Method.PUT, headers, body);
-		// RestRequest request = new RestRequest(url, Method.DELETE, headers, body);
-		RestResponse response = client.execute(request);
-		BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
+		RestRequest request = null;
+		RestResponse response = null;
+		BufferedReader br = null;
 		
+		// 使用方式 (測試)
+		switch (methodForTest) {
+			case GET:
+				headers.add(new Header("accept", "application/json"));
+				request = new RestRequest(url, Method.GET, headers, body);
+				break;
+			case POST:
+				headers.add(new Header("accept", "application/json"));
+				body = "{\"countryName\":\"Dogc\",\"population\":77770}";
+				request = new RestRequest(url, Method.POST, headers, body);
+				break;
+			case PUT:
+				headers.add(new Header("accept", "application/json"));
+				body = "{\"id\":1,\"countryName\":\"CHT\",\"population\":100000}";
+				request = new RestRequest(url, Method.PUT, headers, body);
+				break;
+			case DELETE:
+				url = "http://localhost:8080/country-rest-server/country/2";
+				headers.add(new Header("accept", "application/json"));
+				request = new RestRequest(url, Method.DELETE, headers, body);
+				break;
+			default:
+				break;
+		}
+		
+		// 使用方式
+		response = client.execute(request);
+		br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
+
 		// 輸出結果
 		String output;
-		System.out.println("Output from Server .... \n");
+		System.out.println("HTTP status code: " + response.getHttpStatusCode());
+		System.out.println("Output from Server:");
 		try {
 			while ((output = br.readLine()) != null) {
 				System.out.println(output);
@@ -47,7 +69,7 @@ public class Application {
 			e.printStackTrace();
 		}
 		
-		// 預期使用方式
+		// 使用方式
 		client.close();
 	}
 }

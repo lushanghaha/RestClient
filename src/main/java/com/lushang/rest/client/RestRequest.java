@@ -12,7 +12,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 
 public class RestRequest {
-	
+
 	// HTTP requests
 	private HttpGet getRequest;
 	private HttpPost postRequest;
@@ -27,21 +27,15 @@ public class RestRequest {
 	
 	// 呼叫每個 private member 的時候都先用 this.
 	public RestRequest(String url, Method method, List<Header> headers, String body) {		
+
 		switch (method) {
 			case GET:
 				this.method = Method.GET;
 				this.getRequest = new HttpGet(url);
-				for (Header header : headers) {
-					this.getRequest.addHeader(header.getKey(), header.getValue());
-				}
 				break;
 			case POST:
 				this.method = Method.POST;
 				this.postRequest = new HttpPost(url);
-				for (Header header : headers) {
-					this.postRequest.addHeader(header.getKey(), header.getValue());
-				}
-				
 				try {
 					this.input = new StringEntity(body);
 					this.input.setContentType("application/json");
@@ -54,9 +48,6 @@ public class RestRequest {
 			case PUT:
 				this.method = Method.PUT;
 				this.putRequest = new HttpPut(url);
-				for (Header header : headers) {
-					this.putRequest.addHeader(header.getKey(), header.getValue());
-				}
 				try {
 					this.input = new StringEntity(body);
 					this.input.setContentType("application/json");
@@ -69,14 +60,16 @@ public class RestRequest {
 			case DELETE:
 				this.method = Method.DELETE;
 				this.deleteRequest = new HttpDelete(url);
-				for (Header header : headers) {
-					this.getRequest.addHeader(header.getKey(), header.getValue());
-				}
 				break;
 			case PATCH:
 				break;
 			default:
 				break;
+		}
+		
+		// 大家一起 addHeader
+		for (Header header : headers) {
+			this.getRequest().addHeader(header.getKey(), header.getValue());
 		}
 	}
 	
@@ -93,13 +86,8 @@ public class RestRequest {
 			case PATCH:
 				return patchRequest;
 			default:
-				// 預設回傳 get 好了，待商榷
-				return getRequest;
+				return null;
 		}
-	}
-	
-	public Method getMethod() {
-		return method;
 	}
 
 	public enum Method {
