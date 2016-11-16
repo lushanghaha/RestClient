@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lushang.rest.client.Header;
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+
 import com.lushang.rest.client.RestClient;
 import com.lushang.rest.client.RestRequest;
 import com.lushang.rest.client.RestRequest.Method;
@@ -15,7 +17,7 @@ import com.lushang.rest.client.RestResponse;
 public class Application {
 	public static void main (String[] args) {
 
-		// Select test method
+		// 設定 main function 裡面要測試的 REST request 之 method
 		Method methodForTest = Method.GET;
 		
 		// LuShang's RESTful server
@@ -27,25 +29,27 @@ public class Application {
 		RestResponse response = null;
 		BufferedReader br = null;
 		
-		// 使用方式 (測試)
+		// 使用方式 (依據不同 methodForTest 決定)
 		switch (methodForTest) {
 			case GET:
-				headers.add(new Header("accept", "application/json"));
+				headers.add(new BasicHeader("accept", "application/json"));
 				request = new RestRequest(url, Method.GET, headers, body);
 				break;
 			case POST:
-				headers.add(new Header("accept", "application/json"));
-				body = "{\"countryName\":\"Dogc\",\"population\":77770}";
+				headers.add(new BasicHeader("accept", "application/json"));
+				headers.add(new BasicHeader("content-type", "application/json"));
+				body = "{\"countryName\":\"DoCCgCc\",\"population\":77770}";
 				request = new RestRequest(url, Method.POST, headers, body);
 				break;
 			case PUT:
-				headers.add(new Header("accept", "application/json"));
+				headers.add(new BasicHeader("accept", "application/json"));
+				headers.add(new BasicHeader("content-type", "application/json"));
 				body = "{\"id\":1,\"countryName\":\"CHT\",\"population\":100000}";
 				request = new RestRequest(url, Method.PUT, headers, body);
 				break;
 			case DELETE:
 				url = "http://localhost:8080/country-rest-server/country/2";
-				headers.add(new Header("accept", "application/json"));
+				headers.add(new BasicHeader("accept", "application/json"));
 				request = new RestRequest(url, Method.DELETE, headers, body);
 				break;
 			default:
@@ -65,7 +69,6 @@ public class Application {
 					System.out.println(output);
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (NullPointerException e){

@@ -13,18 +13,17 @@ public class RestClient {
 	private CloseableHttpClient httpClient;
 	
 	public RestClient() {
-		this.httpClient = HttpClients.createDefault();
+		httpClient = HttpClients.createDefault();
 	}
 
 	public RestResponse execute(RestRequest request) {
 		try {
-			// HttpResponse response;
 			HttpResponse response = httpClient.execute((HttpUriRequest) request.getRequest());
 			return new RestResponse(response);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// 表示使用者的 URL 打錯或是 server 掛了
 			System.out.println("Failed to connect " + request.getRequest().getRequestLine().getUri());
 			System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
 			// e.printStackTrace();
@@ -36,7 +35,6 @@ public class RestClient {
 		try {
 			httpClient.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

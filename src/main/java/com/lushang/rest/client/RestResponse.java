@@ -12,7 +12,7 @@ public class RestResponse {
 	
 	public RestResponse(HttpResponse response) {
 		this.response = response;
-		this.httpStatusCode = response.getStatusLine().getStatusCode();
+		httpStatusCode = response.getStatusLine().getStatusCode();
 	}
 	
 	public InputStream getEntityInputStream() {
@@ -20,10 +20,8 @@ public class RestResponse {
 		try {
 			return response.getEntity().getContent();
 		} catch (UnsupportedOperationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
