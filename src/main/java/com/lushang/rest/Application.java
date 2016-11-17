@@ -15,7 +15,7 @@ public class Application {
 	public static void main (String[] args) {
 
 		// 設定 main function 裡面要測試的 REST request 之 method
-		Method methodForTest = Method.DELETE;
+		Method methodForTest = Method.GET;
 		
 		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
