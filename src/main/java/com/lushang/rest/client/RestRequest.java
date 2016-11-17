@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-
 public class RestRequest {
 	
 	private HttpURLConnection conn;
@@ -16,49 +15,32 @@ public class RestRequest {
 	// 參數化的 REST request
 	public RestRequest(String url, Method method, List<Header> headers, String body) {		
 		
-		String input = null;
 		OutputStream os = null;
-		URL serverUrl = null;
-	
+		
+		try {
+			URL serverUrl = new URL(url);
+			conn = (HttpURLConnection) serverUrl.openConnection();
+			conn.setRequestMethod(method.toString());
+			// 將所有 HTTP requests 加入 headers
+			for (Header header : headers) {
+				conn.setRequestProperty(header.getKey(), header.getValue());
+			}
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		switch (method) {
 			case GET:
-				try {
-					serverUrl = new URL(url);
-					conn = (HttpURLConnection) serverUrl.openConnection();
-					conn.setRequestMethod(method.toString());
-					// 將所有 HTTP requests 加入 headers
-					for (Header header : headers) {
-						conn.setRequestProperty(header.getKey(), header.getValue());
-					}
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				break;
 			case POST:
-				try {
-					serverUrl = new URL(url);
-					conn = (HttpURLConnection) serverUrl.openConnection();
-					conn.setDoOutput(true);
-					conn.setRequestMethod(method.toString());
-					// 將所有 HTTP requests 加入 headers
-					for (Header header : headers) {
-						conn.setRequestProperty(header.getKey(), header.getValue());
-					}
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				input = body;
+				conn.setDoOutput(true);
 				try {
 					os = conn.getOutputStream();
-					os.write(input.getBytes());
+					os.write(body.getBytes());
 					os.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -66,6 +48,15 @@ public class RestRequest {
 				}
 				break;
 			case PUT:
+				conn.setDoOutput(true);
+				try {
+					os = conn.getOutputStream();
+					os.write(body.getBytes());
+					os.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case DELETE:
 				break;

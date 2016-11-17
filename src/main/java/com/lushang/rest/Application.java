@@ -11,10 +11,11 @@ import com.lushang.rest.client.RestRequest;
 import com.lushang.rest.client.RestRequest.Method;
 
 public class Application {
+	
 	public static void main (String[] args) {
 
 		// 設定 main function 裡面要測試的 REST request 之 method
-		Method methodForTest = Method.POST;
+		Method methodForTest = Method.DELETE;
 		
 		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
@@ -31,7 +32,7 @@ public class Application {
 			case POST:
 				// headers.add(new Header("Accept", "application/json"));
 				headers.add(new Header("Content-Type", "application/json"));
-				body = "{\"countryName\":\"DoCCgCc\",\"population\":77770}";
+				body = "{\"countryName\":\"Dog\",\"population\":77770}";
 				request = new RestRequest(url, Method.POST, headers, body);
 				break;
 			case PUT:
