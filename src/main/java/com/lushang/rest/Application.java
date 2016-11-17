@@ -27,7 +27,6 @@ public class Application {
 		RestClient client = new RestClient();
 		RestRequest request = null;
 		RestResponse response = null;
-		BufferedReader br = null;
 		
 		// 使用方式 (依據不同 methodForTest 決定)
 		switch (methodForTest) {
@@ -59,7 +58,7 @@ public class Application {
 		// 使用方式
 		response = client.execute(request);
 		try {
-			br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
+			BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntityInputStream())));
 			// 輸出結果
 			String output;
 			System.out.println("HTTP status code: " + response.getHttpStatusCode());
