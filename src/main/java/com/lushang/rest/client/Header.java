@@ -17,5 +17,4 @@ public class Header {
 	public String getValue() {
 		return value;
 	}
-
 }

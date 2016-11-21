@@ -9,56 +9,78 @@ import java.net.URL;
 import java.util.List;
 
 public class RestRequest {
+	private HttpURLConnection connection;
 	
-	private HttpURLConnection conn;
-	
-	// 參數化的 REST request
-	public RestRequest(String url, Method method, List<Header> headers, String body) {		
-		
+	/**
+	 * url：server URL
+	 * method：HTTP request method
+	 * headers：HTTP request headers
+	 * body：HTTP request body
+	 */
+	public RestRequest(String url, Method method, List<Header> headers, String body) {
 		try {
+			// 根據 url 建立一個 URL 物件 serverUrl
 			URL serverUrl = new URL(url);
-			conn = (HttpURLConnection) serverUrl.openConnection();
-			conn.setRequestMethod(method.toString());
-			// 將所有 HTTP requests 加入 headers
+			// 根據 serverUrl 建立一個 HttpURLConnection 物件 connection (建立一個 HTTP request)
+			connection = (HttpURLConnection) serverUrl.openConnection();
+			// 根據 method 設定 connection 的 method (設定 HTTP request method)
+			connection.setRequestMethod(method.toString());
+			// 根據 headers 設定 conn 的 headers (設定 HTTP request headers)
 			for (Header header : headers) {
-				conn.setRequestProperty(header.getKey(), header.getValue());
+				connection.setRequestProperty(header.getKey(), header.getValue());
 			}
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (MalformedURLException e) {
+			// URL 格式錯誤
+			// System.out.println("Invalid URL");
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		// 針對需要 body 的 HTTP request 加入 body，並傳送 (write) 給 server
 		switch (method) {
 			case GET:
 				break;
 			case POST:
-				conn.setDoOutput(true);
+				// 讓 connection 具有 output 的功能，因為 POST 需要先行傳送 data 給 server
+				connection.setDoOutput(true);
 				try {
-					OutputStream os = conn.getOutputStream();
-					os.write(body.getBytes());
-					os.flush();
+					// 取得 destination 為 serverUrl 的 OutputStream，隨時可以傳送 data 給 server
+					// 在此實際上與 server 建立一個完整的 HTTP 連線，但還沒有任何 data 的來往
+					OutputStream outputStream = connection.getOutputStream();
+					// 把 HTTP POST request 的 body 傳送 (write) 到 server (outputStream 的 destination)
+					outputStream.write(body.getBytes());
+					// flush() 執行後，在記憶體 buffer 區中等待被 write 的 data 會立馬被 write
+					outputStream.flush();
+					// 關閉 outputStream，可以釋放與 outputStream 有關的網路資源；但有些 protocol 會另外定義 close 這個行為
+					outputStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case PUT:
-				conn.setDoOutput(true);
+				connection.setDoOutput(true);
 				try {
-					OutputStream os = conn.getOutputStream();
-					os.write(body.getBytes());
-					os.flush();
+					OutputStream outputStream = connection.getOutputStream();
+					outputStream.write(body.getBytes());
+					outputStream.flush();
+					outputStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case DELETE:
 				break;
 			case PATCH:
+				connection.setDoOutput(true);
+				try {
+					OutputStream outputStream = connection.getOutputStream();
+					outputStream.write(body.getBytes());
+					outputStream.flush();
+					outputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				break;
 			default:
 				break;
@@ -70,30 +92,30 @@ public class RestRequest {
 	}
 
 	public InputStream getInputStream() {
-		// TODO Auto-generated method stub
 		try {
-			return conn.getInputStream();
+			// getInputStream(): 取得 source 為 serverUrl 的 InputStream，隨時可以從該 server 取得 (read) data
+			// 在此實際上與 server 建立一個完整的 HTTP 連線，但還沒有任何 data 的來往
+			return connection.getInputStream();
 		} catch (IOException e) {
-			// 表示使用者的 URL 打錯或是 server 掛了
-			System.out.println("Failed to connect " + conn.getURL());
-			System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
-			// e.printStackTrace();
+			// URL 錯誤 server 掛了，或其他問題
+			// System.out.println("Failed to connect " + conn.getURL());
+			// System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
+			e.printStackTrace();
 		}
 		return null;
 	}
 
 	public int getResponseCode() {
-		// TODO Auto-generated method stub
 		try {
-			return conn.getResponseCode();
+			return connection.getResponseCode();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
 	}
 
 	public void disconnect() {
-		conn.disconnect();
+		// connection 一旦被關閉，就不能再被使用了
+		connection.disconnect();
 	}
 }

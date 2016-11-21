@@ -11,9 +11,8 @@ import com.lushang.rest.client.RestRequest;
 import com.lushang.rest.client.RestRequest.Method;
 
 public class Application {
-	
 	public static void main (String[] args) {
-
+		
 		// 設定 main function 裡面要測試的 REST request 之 method
 		Method methodForTest = Method.GET;
 		
@@ -30,13 +29,13 @@ public class Application {
 				request = new RestRequest(url, Method.GET, headers, body);
 				break;
 			case POST:
-				// headers.add(new Header("Accept", "application/json"));
+				headers.add(new Header("Accept", "application/json"));
 				headers.add(new Header("Content-Type", "application/json"));
-				body = "{\"countryName\":\"Dog\",\"population\":77770}";
+				body = "{\"countryName\":\"Dog\",\"population\":7777}";
 				request = new RestRequest(url, Method.POST, headers, body);
 				break;
 			case PUT:
-				// headers.add(new Header("Accept", "application/json"));
+				headers.add(new Header("Accept", "application/json"));
 				headers.add(new Header("Content-Type", "application/json"));
 				body = "{\"id\":1,\"countryName\":\"CHT\",\"population\":100000}";
 				request = new RestRequest(url, Method.PUT, headers, body);
@@ -45,6 +44,8 @@ public class Application {
 				url = "http://localhost:8080/country-rest-server/country/2";
 				headers.add(new Header("Accept", "application/json"));
 				request = new RestRequest(url, Method.DELETE, headers, body);
+				break;
+			case PATCH:
 				break;
 			default:
 				break;
@@ -65,7 +66,7 @@ public class Application {
 			}
 		} catch (NullPointerException e){
 			// System.out.println("No response from the server");
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		// 使用方式
