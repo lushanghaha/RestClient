@@ -106,7 +106,7 @@ public class RestRequest {
 		connection.disconnect();
 	}
 
-	public String getResponse() {
+	public String getResponseContent() {
 		BufferedReader bufferReader = null;
 		StringBuilder builder = new StringBuilder();
 		String string = "";

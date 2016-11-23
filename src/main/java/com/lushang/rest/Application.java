@@ -11,7 +11,7 @@ public class Application {
 	public static void main (String[] args) {
 		
 		// 設定 main function 裡面要測試的 REST request 之 method
-		Method methodForTest = Method.POST;
+		Method methodForTest = Method.GET;
 		
 		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
@@ -50,7 +50,7 @@ public class Application {
 
 		// 使用方式
 		System.out.println("HTTP status code: " + request.getResponseCode());
-		System.out.println("Output from Server:" + request.getResponse());
+		System.out.println("Output from Server:" + request.getResponseContent());
 
 		// 使用方式
 		request.disconnect();
