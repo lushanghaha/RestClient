@@ -1,8 +1,5 @@
 package com.lushang.rest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +11,7 @@ public class Application {
 	public static void main (String[] args) {
 		
 		// 設定 main function 裡面要測試的 REST request 之 method
-		Method methodForTest = Method.GET;
+		Method methodForTest = Method.POST;
 		
 		// LuShang's RESTful server
 		String url = "http://localhost:8080/country-rest-server/countries";
@@ -50,25 +47,11 @@ public class Application {
 			default:
 				break;
 		}
-		
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader((request.getInputStream())));
-			// 輸出結果
-			String output;
-			System.out.println("HTTP status code: " + request.getResponseCode());
-			System.out.println("Output from Server:");
-			try {
-				while ((output = br.readLine()) != null) {
-					System.out.println(output);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (NullPointerException e){
-			// System.out.println("No response from the server");
-			e.printStackTrace();
-		}
-		
+
+		// 使用方式
+		System.out.println("HTTP status code: " + request.getResponseCode());
+		System.out.println("Output from Server:" + request.getResponse());
+
 		// 使用方式
 		request.disconnect();
 	}

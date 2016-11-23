@@ -1,7 +1,8 @@
 package com.lushang.rest.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -89,21 +90,7 @@ public class RestRequest {
 
 	public enum Method {
 	    GET, POST, PUT, DELETE, PATCH
-	}
-
-	public InputStream getInputStream() {
-		try {
-			// getInputStream(): 取得 source 為 serverUrl 的 InputStream，隨時可以從該 server 取得 (read) data
-			// 在此實際上與 server 建立一個完整的 HTTP 連線，但還沒有任何 data 的來往
-			return connection.getInputStream();
-		} catch (IOException e) {
-			// URL 錯誤 server 掛了，或其他問題
-			// System.out.println("Failed to connect " + conn.getURL());
-			// System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
-			e.printStackTrace();
-		}
-		return null;
-	}
+	}	
 
 	public int getResponseCode() {
 		try {
@@ -117,5 +104,29 @@ public class RestRequest {
 	public void disconnect() {
 		// connection 一旦被關閉，就不能再被使用了
 		connection.disconnect();
+	}
+
+	public String getResponse() {
+		BufferedReader bufferReader = null;
+		StringBuilder builder = new StringBuilder();
+		String string = "";
+		try {
+			// getInputStream(): 取得 source 為 serverUrl 的 InputStream，隨時可以從該 server 取得 (read) data
+			// 在此實際上與 server 建立一個完整的 HTTP 連線，但還沒有任何 data 的來往
+			bufferReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		} catch (IOException e) {
+			// URL 錯誤 server 掛了，或其他問題
+			// System.out.println("Failed to connect " + conn.getURL());
+			// System.out.println("Check whether the url is correct and the web service that you are requesting is up and running");
+			e.printStackTrace();
+		}
+		try {
+			while ((string = bufferReader.readLine()) != null) {
+			    builder.append(string);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
 	}
 }
