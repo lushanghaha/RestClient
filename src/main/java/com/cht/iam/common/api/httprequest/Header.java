@@ -1,4 +1,4 @@
-package com.lushang.rest.client;
+package com.cht.iam.common.api.httprequest;
 
 public class Header {
 	

@@ -3,9 +3,9 @@ package com.lushang.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lushang.rest.client.Header;
-import com.lushang.rest.client.RestRequest;
-import com.lushang.rest.client.RestRequest.Method;
+import com.cht.iam.common.api.httprequest.Header;
+import com.cht.iam.common.api.httprequest.RestRequest;
+import com.cht.iam.common.api.httprequest.RestRequest.Method;
 
 public class Application {
 	public static void main (String[] args) {
