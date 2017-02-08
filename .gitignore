@@ -4,3 +4,9 @@
 .settings/
 target/
 *.ucls
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
